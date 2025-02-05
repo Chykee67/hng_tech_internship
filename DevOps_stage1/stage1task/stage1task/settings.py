@@ -34,7 +34,7 @@ if ENVIRONMENT == "development":
 else:
     DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [https://hng-tech-internship.onrender.com, localhost]
 
 
 # Application definition
