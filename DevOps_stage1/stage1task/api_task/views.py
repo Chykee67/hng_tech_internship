@@ -8,16 +8,19 @@ from bs4 import BeautifulSoup
 
 from sympy import isprime, is_perfect, simplify
 
+
 class ClassifyNumber(APIView):
     
     def get(self, request, format=None):
+
         """
         returns json object containing details about the number specified in the GET request
         """
-        #Get number in the request's query parameter from the request object, ensuring it is an integer
+
+        #Get number in the request's query parameter from the request object, ensuring it is a valid integer
         try:
             query_param = request.GET.get("number", "")
-            number = int(query_param)
+            number = int(query_param.lstrip('-'))  #using lstrip ensures negative integers are accepted but "cleaned"
 
         except ValueError:
             return Response({
@@ -27,12 +30,11 @@ class ClassifyNumber(APIView):
 
         else:
             #use requests, beautifulsoup to retrieve the corresponding html fun fact page for the number's math type
-
             html_doc = requests.get(f"http://numbersapi.com/{number}/math").text
 
             soup = BeautifulSoup(html_doc, "lxml")
 
-            #create a dictionary to hold the facts about the number
+            #create a python dictionary to hold the facts about the number
             number_details = {
                 "number": number,
                 "is_prime": isprime(number),
@@ -42,11 +44,11 @@ class ClassifyNumber(APIView):
                 "funfact": soup.get_text()
             }
 
-            #return serialized number_details as a json resonse 
+            #return the facts serialized as a JSON resonse 
             return Response(number_details)
 
 
-    #function that returns the sum of digits
+    #function that returns the sum of digits of a number
     def get_digits_sum(self, number):
 
         sum = 0
@@ -56,6 +58,7 @@ class ClassifyNumber(APIView):
 
         return sum
 
+
     #function that checks the armstrong property of a number
     def is_armstrong(self, number):
         nod = len(str(number))
@@ -64,15 +67,17 @@ class ClassifyNumber(APIView):
 
         for digit in str(number):
             sum += int(digit) ** nod
+
         if sum == number:
             return True
         else:
             return False
 
-    #function that returns the armstrong, even or odd properties of a number
+
+    #function that returns a list of properties of a number (armstrong and/or even/odd)
     def get_properties(self, number):
 
-        properties = [] #initialize an empty properties list
+        properties = []
 
         if self.is_armstrong(number):
             properties.append("armstrong")
