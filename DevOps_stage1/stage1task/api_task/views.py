@@ -41,7 +41,7 @@ class ClassifyNumber(APIView):
                 "is_perfect": is_perfect(number),
                 "properties": self.get_properties(number),
                 "digit_sum": self.get_digits_sum(number),
-                "funfact": soup.get_text()
+                "fun_fact": soup.get_text()
             }
 
             #return the facts serialized as a JSON resonse 
