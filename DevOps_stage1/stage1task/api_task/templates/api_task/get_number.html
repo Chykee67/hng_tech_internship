@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <p>Please enter a number in the box below and click submit to see a fun fact about it.</p>
+    </head>
+
+    <body>
+
+        <p>{% if error_message %}{{error_message}}{% endif %}</p>
+
+        <form action="{% url 'api_task:classify_number' %}" method="post">
+            {% csrf_token %}
+            <label for="number">Pick a number</label>
+            <input type="text" id="number" name="number" value="1">
+            <input type="submit" value="Submit">
+        </form>
+
+    </body>
+</html>
